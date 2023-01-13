@@ -90,8 +90,12 @@ class VanillaAstar(nn.Module):
             AstarOutput: search histories and solution paths, and optionally intermediate search results.
         """
 
-        cost_maps = map_designs
-        obstacles_maps = map_designs
+        if self.use_differentiable_astar:
+            cost_maps = map_designs 
+            obstacles_maps = torch.ones_like(map_designs)
+        else:
+            cost_maps = map_designs 
+            obstacles_maps = 1 - map_designs
 
         return self.perform_astar(
             cost_maps,

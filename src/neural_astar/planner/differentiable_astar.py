@@ -200,7 +200,7 @@ class DifferentiableAstar(nn.Module):
         size = cost_maps.shape[-1]
         Tmax = self.Tmax if self.training else 1.0
         Tmax = int(Tmax * size * size)
-        for t in range(Tmax):
+        for t in range(1000):
 
             # select the node that minimizes cost
             f = self.g_ratio * g + (1 - self.g_ratio) * h

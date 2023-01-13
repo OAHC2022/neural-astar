@@ -138,13 +138,20 @@ def solve_single(
                 & (n_idx not in open_list)
                 & (n_idx not in close_list)
             ):
-                fnew = (
+                f_new = (
                     v_cost
                     - (1 - g_ratio) * compute_chebyshev_distance(v_idx, goal_idx, W)
                     + g_ratio * pred_cost_vct[n_idx]
                     + (1 - g_ratio) * compute_chebyshev_distance(n_idx, goal_idx, W)
                 )
-                open_list.additem(n_idx, fnew)
+            cond = (n_idx not in open_list) & (n_idx not in close_list)
+            if n_idx in open_list:
+                cond = cond | (open_list[n_idx] > f_new)
+            if cond:
+                try:
+                    open_list.additem(n_idx, f_new)
+                except:
+                    open_list[n_idx] = f_new
                 parent_list[n_idx] = v_idx
 
     history_map = get_history(close_list, H, W)
