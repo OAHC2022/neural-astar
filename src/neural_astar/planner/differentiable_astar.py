@@ -126,7 +126,7 @@ def backtrack(
 
 
 class DifferentiableAstar(nn.Module):
-    def __init__(self, g_ratio: float = 0.5, Tmax: float = 1.0):
+    def __init__(self, g_ratio: float = 0.5, Tmax: int = -1):
         """
         Differentiable A* module
 
@@ -144,7 +144,7 @@ class DifferentiableAstar(nn.Module):
         self.get_heuristic = get_heuristic
 
         self.g_ratio = g_ratio
-        assert (Tmax > 0) & (Tmax <= 1), "Tmax must be within (0, 1]"
+        assert (Tmax > 0), "Tmax must be within (0, 1]"
         self.Tmax = Tmax
 
     def forward(
@@ -197,10 +197,8 @@ class DifferentiableAstar(nn.Module):
             * goal_maps.reshape(num_samples, -1).max(-1, keepdim=True)[-1]
         )
 
-        size = cost_maps.shape[-1]
-        Tmax = self.Tmax if self.training else 1.0
-        Tmax = int(Tmax * size * size)
-        for t in range(1000):
+        Tmax = self.Tmax 
+        for t in range(Tmax):
 
             # select the node that minimizes cost
             f = self.g_ratio * g + (1 - self.g_ratio) * h

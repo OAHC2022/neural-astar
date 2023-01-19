@@ -19,6 +19,7 @@ class VanillaAstar(nn.Module):
         self,
         g_ratio: float = 0.5,
         use_differentiable_astar: bool = True,
+        Tmax: int = -1
     ):
         """
         Vanilla A* search
@@ -40,7 +41,7 @@ class VanillaAstar(nn.Module):
         super().__init__()
         self.astar = DifferentiableAstar(
             g_ratio=g_ratio,
-            Tmax=1.0,
+            Tmax=Tmax,
         )
         self.g_ratio = g_ratio
         self.use_differentiable_astar = use_differentiable_astar
