@@ -19,7 +19,8 @@ class VanillaAstar(nn.Module):
         self,
         g_ratio: float = 0.5,
         use_differentiable_astar: bool = True,
-        Tmax: int = -1
+        Tmax: int = -1,
+        no_obstacle=False
     ):
         """
         Vanilla A* search
@@ -45,6 +46,7 @@ class VanillaAstar(nn.Module):
         )
         self.g_ratio = g_ratio
         self.use_differentiable_astar = use_differentiable_astar
+        self.no_obstacle = no_obstacle
 
     def perform_astar(
         self,
@@ -98,6 +100,9 @@ class VanillaAstar(nn.Module):
             cost_maps = map_designs 
             obstacles_maps = 1 - map_designs
 
+        if self.no_obstacle:
+            obstacles_maps = torch.ones_like(map_designs)
+            
         return self.perform_astar(
             cost_maps,
             start_maps,
